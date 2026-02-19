@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.exportDocx"><span class="type-signature"></span>docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.exportDocx<span class="signature">(zip)</span><span class="type-signature"> &rarr; {Promise.&lt;Blob>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Exports the modified ZIP archive as a downloadable Blob.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>zip</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSZip</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ZIP archive to export.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line171">line 171</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The .docx Blob.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Blob></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.extractTextFromXml"><span class="type-signature"></span>docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.extractTextFromXml<span class="signature">(xml)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Extracts all text content from the document XML for preview/matching.
+Concatenates text within &lt;w:t&gt; tags.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>xml</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The document XML string.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line45">line 45</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Plain text content of the document.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.generateHtmlPreview"><span class="type-signature"></span>docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.generateHtmlPreview<span class="signature">(arrayBuffer)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Generates an HTML preview string from a .docx file's ArrayBuffer.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arrayBuffer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ArrayBuffer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The .docx file as an ArrayBuffer.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line160">line 160</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>HTML string of the document content.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.getDocumentXml"><span class="type-signature"></span>docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.getDocumentXml<span class="signature">(zip)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Extracts the raw XML string of the main document.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>zip</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSZip</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The loaded .docx ZIP archive.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The XML content of word/document.xml.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.loadDocx"><span class="type-signature"></span>docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.loadDocx<span class="signature">(file)</span><span class="type-signature"> &rarr; {Promise.&lt;JSZip>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Loads a .docx File into a JSZip instance.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">File</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The .docx file to load.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The parsed ZIP archive.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;JSZip></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.replaceInDocx"><span class="type-signature"></span>docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.replaceInDocx<span class="signature">(zip, pattern, replacement, options)</span><span class="type-signature"> &rarr; {Promise.&lt;JSZip>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Applies text replacement to the .docx ZIP and returns a modified copy.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>zip</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSZip</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The loaded .docx ZIP archive.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pattern</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The search pattern.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>replacement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The replacement text.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Replace options.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line147">line 147</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Modified ZIP with replacements applied.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;JSZip></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.replaceInXml"><span class="type-signature"></span>docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.module:.replaceInXml<span class="signature">(xml, pattern, replacement, options)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Replaces text within the document XML while preserving formatting.
+Operates on &lt;w:t&gt; text nodes, handling cases where a match may span
+multiple &lt;w:t&gt; elements within the same &lt;w:r&gt; (run) or across runs.</p>
+<p>Strategy: collect all &lt;w:t&gt; contents, perform replacement on the
+concatenated text, then redistribute back into the XML tags.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>xml</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The document XML.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pattern</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The search pattern.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>replacement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The replacement text.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Replace options (isCaseSensitive, isWholeWord, isRegex).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Modified XML with replacements applied.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~replaceInParagraph"><span class="type-signature">(inner) </span>replaceInParagraph<span class="signature">(paragraphXml, regex, replacement)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Replaces matches within a single OOXML paragraph (&lt;w:p&gt;).
+Collects text from all &lt;w:t&gt; nodes, applies regex, redistributes text.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>paragraphXml</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The paragraph XML string.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>regex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RegExp</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Compiled search regex.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>replacement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Replacement text.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_docxProcessor.js.html">core/docxProcessor.js</a>, <a href="core_docxProcessor.js.html#line94">line 94</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Modified paragraph XML.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="FileUpload%250AManages%2520the%2520drag-and-drop%2520upload%2520zone%2520and%2520file%2520input.module_.html">FileUpload
+Manages the drag-and-drop upload zone and file input.</a></li><li><a href="FindReplace%250AManages%2520the%2520find_replace%2520section%2520visibility%2520and%2520action%2520buttons.module_.html">FindReplace
+Manages the find/replace section visibility and action buttons.</a></li><li><a href="MatchInfo%250ADisplays%2520the%2520match%2520count%2520badge%2520in%2520the%2520preview%2520header.module_.html">MatchInfo
+Displays the match count badge in the preview header.</a></li><li><a href="Preview%250ARenders%2520document%2520content%2520in%2520the%2520preview%2520panel%2520with%2520match%2520highlights.module_.html">Preview
+Renders document content in the preview panel with match highlights.</a></li><li><a href="ReplacementList%250AManages%2520multiple%2520find_replace%2520input%2520pairs.module_.html">ReplacementList
+Manages multiple find/replace input pairs.</a></li><li><a href="ThemeToggle%250ADark_light%2520mode%2520toggle%2520with%2520localStorage%2520persistence%2520and%2520system%2520preference%2520detection.module_.html">ThemeToggle
+Dark/light mode toggle with localStorage persistence and system preference detection.</a></li><li><a href="docxProcessor%250AHandles%2520.docx%2520file%2520loading,%2520XML-level%2520text%2520replacement,%2520preview%2520generation,%2520and%2520export.%250AUses%2520JSZip%2520for%2520ZIP%2520manipulation%2520and%2520Mammoth%2520for%2520HTML%2520preview%2520rendering.module_.html">docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.</a></li><li><a href="download%250AWrapper%2520around%2520FileSaver.js%2520for%2520downloading%2520files.module_.html">download
+Wrapper around FileSaver.js for downloading files.</a></li><li><a href="fileHelpers%250AUtility%2520functions%2520for%2520file%2520type%2520detection%2520and%2520validation.module_.html">fileHelpers
+Utility functions for file type detection and validation.</a></li><li><a href="main%250AApplication%2520entry%2520point.%250AInitializes%2520components,%2520manages%2520state,%2520and%2520wires%2520event%2520flow.module_.html">main
+Application entry point.
+Initializes components, manages state, and wires event flow.</a></li><li><a href="replacer%250ACore%2520find-and-replace%2520engine.%250APure%2520functions%2520%25E2%2580%2594%2520no%2520DOM,%2520no%2520side%2520effects.module_.html">replacer
+Core find-and-replace engine.
+Pure functions — no DOM, no side effects.</a></li><li><a href="txtProcessor%250APlain%2520text%2520file%2520reading,%2520replacing,%2520and%2520exporting.module_.html">txtProcessor
+Plain text file reading, replacing, and exporting.</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Feb 19 2026 15:11:14 GMT+0700 (Western Indonesia Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

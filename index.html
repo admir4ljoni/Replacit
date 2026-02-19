@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Replacit — Bulk find and replace text in your documents. Privacy-first, runs entirely in your browser." />
+  <title>Replacit — Bulk Find &amp; Replace in Documents</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header id="app-header">
+      <div class="header-left">
+        <img src="/favicon.svg" alt="Replacit logo" class="logo-icon" />
+        <h1>Replacit</h1>
+      </div>
+      <div class="header-right">
+        <span class="privacy-badge" title="Your files never leave your browser">
+          <i class="icon-shield"></i>
+          <span>100% Private</span>
+        </span>
+        <button id="theme-toggle" type="button" aria-label="Toggle dark/light mode">
+          <i class="icon-sun" id="theme-icon-light"></i>
+          <i class="icon-moon" id="theme-icon-dark"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="app-main">
+      <!-- Left Panel: Controls -->
+      <section id="panel-controls" class="glass-panel">
+        <!-- Upload Zone -->
+        <div id="upload-zone" class="upload-area" role="button" tabindex="0" aria-label="Upload a document">
+          <div class="upload-content">
+            <i class="icon-upload-cloud upload-icon"></i>
+            <p class="upload-title">Drop your file here</p>
+            <p class="upload-subtitle">or click to browse</p>
+            <p class="upload-formats">.docx &bull; .txt</p>
+          </div>
+          <input type="file" id="file-input" accept=".docx,.txt" hidden />
+        </div>
+
+        <!-- File Info -->
+        <div id="file-info" class="file-info" hidden>
+          <div class="file-info-row">
+            <i class="icon-file-text"></i>
+            <span id="file-name"></span>
+            <button id="file-remove" type="button" aria-label="Remove file" class="btn-icon">
+              <i class="icon-x"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Find & Replace Inputs -->
+        <div id="find-replace-section" class="section" hidden>
+          <div id="replacement-list">
+            <!-- Replacement pairs are injected here -->
+          </div>
+          <button id="add-pair-btn" type="button" class="btn-secondary">
+            <i class="icon-plus"></i> Add another pair
+          </button>
+
+          <hr />
+
+          <!-- Options -->
+          <fieldset class="options-group">
+            <legend>Options</legend>
+            <label class="toggle-label">
+              <input type="checkbox" id="opt-case-sensitive" />
+              <span>Case sensitive</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" id="opt-whole-word" />
+              <span>Whole word only</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" id="opt-regex" />
+              <span>Regex mode</span>
+            </label>
+          </fieldset>
+
+          <hr />
+
+          <!-- Actions -->
+          <div class="actions-row">
+            <button id="btn-replace-all" type="button" class="btn-primary" disabled>
+              <i class="icon-replace-all"></i> Replace All
+            </button>
+            <button id="btn-undo" type="button" class="btn-secondary" disabled>
+              <i class="icon-undo-2"></i> Undo
+            </button>
+            <button id="btn-download" type="button" class="btn-accent" disabled>
+              <i class="icon-download"></i> Download
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Preview -->
+      <section id="panel-preview" class="glass-panel">
+        <div class="preview-header">
+          <h2>Preview</h2>
+          <div id="match-info" class="match-badge" hidden>
+            <span id="match-count">0</span> matches
+          </div>
+        </div>
+        <div id="preview-content" class="preview-body">
+          <div class="preview-empty">
+            <i class="icon-eye"></i>
+            <p>Upload a document to see a preview</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Status Toast -->
+    <div id="status-toast" class="toast" hidden role="status" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

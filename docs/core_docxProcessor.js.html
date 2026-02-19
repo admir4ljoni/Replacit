@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/docxProcessor.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/docxProcessor.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module docxProcessor
+ * Handles .docx file loading, XML-level text replacement, preview generation, and export.
+ * Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.
+ */
+
+import JSZip from 'jszip';
+import mammoth from 'mammoth';
+import { buildRegex } from './replacer.js';
+
+const DOCUMENT_XML_PATH = 'word/document.xml';
+
+/**
+ * Loads a .docx File into a JSZip instance.
+ *
+ * @param {File} file - The .docx file to load.
+ * @returns {Promise&lt;JSZip>} The parsed ZIP archive.
+ */
+export async function loadDocx(file) {
+    const arrayBuffer = await file.arrayBuffer();
+    return JSZip.loadAsync(arrayBuffer);
+}
+
+/**
+ * Extracts the raw XML string of the main document.
+ *
+ * @param {JSZip} zip - The loaded .docx ZIP archive.
+ * @returns {Promise&lt;string>} The XML content of word/document.xml.
+ */
+export async function getDocumentXml(zip) {
+    const xmlFile = zip.file(DOCUMENT_XML_PATH);
+    if (!xmlFile) {
+        throw new Error('Invalid .docx: word/document.xml not found.');
+    }
+    return xmlFile.async('string');
+}
+
+/**
+ * Extracts all text content from the document XML for preview/matching.
+ * Concatenates text within &lt;w:t> tags.
+ *
+ * @param {string} xml - The document XML string.
+ * @returns {string} Plain text content of the document.
+ */
+export function extractTextFromXml(xml) {
+    const textMatches = xml.match(/&lt;w:t[^>]*>([^&lt;]*)&lt;\/w:t>/g);
+    if (!textMatches) {
+        return '';
+    }
+
+    return textMatches
+        .map((tag) => {
+            const content = tag.replace(/&lt;w:t[^>]*>/, '').replace(/&lt;\/w:t>/, '');
+            return content;
+        })
+        .join('');
+}
+
+/**
+ * Replaces text within the document XML while preserving formatting.
+ * Operates on &lt;w:t> text nodes, handling cases where a match may span
+ * multiple &lt;w:t> elements within the same &lt;w:r> (run) or across runs.
+ *
+ * Strategy: collect all &lt;w:t> contents, perform replacement on the
+ * concatenated text, then redistribute back into the XML tags.
+ *
+ * @param {string} xml - The document XML.
+ * @param {string} pattern - The search pattern.
+ * @param {string} replacement - The replacement text.
+ * @param {object} options - Replace options (isCaseSensitive, isWholeWord, isRegex).
+ * @returns {string} Modified XML with replacements applied.
+ */
+export function replaceInXml(xml, pattern, replacement, options = {}) {
+    const regex = buildRegex(pattern, options);
+    if (!regex) {
+        return xml;
+    }
+
+    // Strategy: find all &lt;w:p> paragraph blocks, process each independently
+    return xml.replace(/&lt;w:p[ >][\s\S]*?&lt;\/w:p>/g, (paragraph) => {
+        return replaceInParagraph(paragraph, regex, replacement);
+    });
+}
+
+/**
+ * Replaces matches within a single OOXML paragraph (&lt;w:p>).
+ * Collects text from all &lt;w:t> nodes, applies regex, redistributes text.
+ *
+ * @param {string} paragraphXml - The paragraph XML string.
+ * @param {RegExp} regex - Compiled search regex.
+ * @param {string} replacement - Replacement text.
+ * @returns {string} Modified paragraph XML.
+ */
+function replaceInParagraph(paragraphXml, regex, replacement) {
+    const textTagRegex = /&lt;w:t([^>]*)>([^&lt;]*)&lt;\/w:t>/g;
+    const segments = [];
+    let match;
+
+    // Collect all text segments with their positions
+    while ((match = textTagRegex.exec(paragraphXml)) !== null) {
+        segments.push({
+            fullMatch: match[0],
+            attrs: match[1],
+            text: match[2],
+            start: match.index,
+            end: match.index + match[0].length,
+        });
+    }
+
+    if (segments.length === 0) {
+        return paragraphXml;
+    }
+
+    // Concatenate all text
+    const fullText = segments.map((s) => s.text).join('');
+    const replacedText = fullText.replace(regex, replacement);
+
+    // If nothing changed, return as-is
+    if (fullText === replacedText) {
+        return paragraphXml;
+    }
+
+    // Put all replaced text into the first &lt;w:t> and empty the rest
+    // Ensure xml:space="preserve" to keep whitespace
+    let result = paragraphXml;
+
+    for (let i = segments.length - 1; i >= 0; i--) {
+        const segment = segments[i];
+        const newText = i === 0 ? replacedText : '';
+        const attrs = newText.length > 0 ? ' xml:space="preserve"' : segment.attrs;
+        const newTag = `&lt;w:t${attrs}>${newText}&lt;/w:t>`;
+        result = result.slice(0, segment.start) + newTag + result.slice(segment.end);
+    }
+
+    return result;
+}
+
+/**
+ * Applies text replacement to the .docx ZIP and returns a modified copy.
+ *
+ * @param {JSZip} zip - The loaded .docx ZIP archive.
+ * @param {string} pattern - The search pattern.
+ * @param {string} replacement - The replacement text.
+ * @param {object} options - Replace options.
+ * @returns {Promise&lt;JSZip>} Modified ZIP with replacements applied.
+ */
+export async function replaceInDocx(zip, pattern, replacement, options = {}) {
+    const xml = await getDocumentXml(zip);
+    const modifiedXml = replaceInXml(xml, pattern, replacement, options);
+    zip.file(DOCUMENT_XML_PATH, modifiedXml);
+    return zip;
+}
+
+/**
+ * Generates an HTML preview string from a .docx file's ArrayBuffer.
+ *
+ * @param {ArrayBuffer} arrayBuffer - The .docx file as an ArrayBuffer.
+ * @returns {Promise&lt;string>} HTML string of the document content.
+ */
+export async function generateHtmlPreview(arrayBuffer) {
+    const result = await mammoth.convertToHtml({ arrayBuffer });
+    return result.value;
+}
+
+/**
+ * Exports the modified ZIP archive as a downloadable Blob.
+ *
+ * @param {JSZip} zip - The ZIP archive to export.
+ * @returns {Promise&lt;Blob>} The .docx Blob.
+ */
+export async function exportDocx(zip) {
+    return zip.generateAsync({
+        type: 'blob',
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    });
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="FileUpload%250AManages%2520the%2520drag-and-drop%2520upload%2520zone%2520and%2520file%2520input.module_.html">FileUpload
+Manages the drag-and-drop upload zone and file input.</a></li><li><a href="FindReplace%250AManages%2520the%2520find_replace%2520section%2520visibility%2520and%2520action%2520buttons.module_.html">FindReplace
+Manages the find/replace section visibility and action buttons.</a></li><li><a href="MatchInfo%250ADisplays%2520the%2520match%2520count%2520badge%2520in%2520the%2520preview%2520header.module_.html">MatchInfo
+Displays the match count badge in the preview header.</a></li><li><a href="Preview%250ARenders%2520document%2520content%2520in%2520the%2520preview%2520panel%2520with%2520match%2520highlights.module_.html">Preview
+Renders document content in the preview panel with match highlights.</a></li><li><a href="ReplacementList%250AManages%2520multiple%2520find_replace%2520input%2520pairs.module_.html">ReplacementList
+Manages multiple find/replace input pairs.</a></li><li><a href="ThemeToggle%250ADark_light%2520mode%2520toggle%2520with%2520localStorage%2520persistence%2520and%2520system%2520preference%2520detection.module_.html">ThemeToggle
+Dark/light mode toggle with localStorage persistence and system preference detection.</a></li><li><a href="docxProcessor%250AHandles%2520.docx%2520file%2520loading,%2520XML-level%2520text%2520replacement,%2520preview%2520generation,%2520and%2520export.%250AUses%2520JSZip%2520for%2520ZIP%2520manipulation%2520and%2520Mammoth%2520for%2520HTML%2520preview%2520rendering.module_.html">docxProcessor
+Handles .docx file loading, XML-level text replacement, preview generation, and export.
+Uses JSZip for ZIP manipulation and Mammoth for HTML preview rendering.</a></li><li><a href="download%250AWrapper%2520around%2520FileSaver.js%2520for%2520downloading%2520files.module_.html">download
+Wrapper around FileSaver.js for downloading files.</a></li><li><a href="fileHelpers%250AUtility%2520functions%2520for%2520file%2520type%2520detection%2520and%2520validation.module_.html">fileHelpers
+Utility functions for file type detection and validation.</a></li><li><a href="main%250AApplication%2520entry%2520point.%250AInitializes%2520components,%2520manages%2520state,%2520and%2520wires%2520event%2520flow.module_.html">main
+Application entry point.
+Initializes components, manages state, and wires event flow.</a></li><li><a href="replacer%250ACore%2520find-and-replace%2520engine.%250APure%2520functions%2520%25E2%2580%2594%2520no%2520DOM,%2520no%2520side%2520effects.module_.html">replacer
+Core find-and-replace engine.
+Pure functions — no DOM, no side effects.</a></li><li><a href="txtProcessor%250APlain%2520text%2520file%2520reading,%2520replacing,%2520and%2520exporting.module_.html">txtProcessor
+Plain text file reading, replacing, and exporting.</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Feb 19 2026 15:11:14 GMT+0700 (Western Indonesia Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
